@@ -1,10 +1,14 @@
 import path from 'path';
+import webpack from 'webpack';
+import autoprefixer from 'autoprefixer';
+import precss from 'precss';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 export default {
-  debug: true,
+  //debug: true,
   devtool: 'inline-source-map',
-  noInfo: false,
+  //noInfo: false,
+  mode: 'development',
   entry: [
     path.resolve(__dirname, 'src/index')
   ],
@@ -13,18 +17,59 @@ export default {
     path: path.resolve(__dirname, 'src'),
     publicPath: '/',
     filename: 'bundle.js'
+    //filename: '[name].[chunkhash].js'
   },
   plugins: [
     // Create HTML file that includes reference to bundled JS.
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: true
-    })
+    }),
+    new webpack.ProgressPlugin()
   ],
   module: {
-    loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loaders: ['babel']},
-      {test: /\.css$/, loaders: ['style','css']}
-    ]
-  }
+		rules: [
+			{
+        test: /.(js|jsx)$/,
+        exclude: /node_modules/,
+				include: [path.resolve(__dirname, 'src')],
+        loader: 'babel-loader',
+				options: {
+					presets: [
+              '@babel/preset-env',
+              "@babel/preset-flow",
+              "@babel/preset-react",
+              "@babel/preset-typescript",
+							{
+								modules: true
+							}
+					]
+				}
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style','css']
+      }
+		]
+	},
+
+	optimization: {
+		splitChunks: {
+			cacheGroups: {
+				vendors: {
+					priority: -10,
+					test: /[\\/]node_modules[\\/]/
+				}
+			},
+
+			chunks: 'async',
+			minChunks: 1,
+			minSize: 30000,
+			name: true
+		}
+	},
+
+	devServer: {
+		open: true
+	}
 }
