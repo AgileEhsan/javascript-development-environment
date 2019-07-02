@@ -36,19 +36,17 @@ export default {
         loader: 'babel-loader',
 				options: {
 					presets: [
-              '@babel/preset-env',
+              "@babel/preset-env",
               "@babel/preset-flow",
               "@babel/preset-react",
               "@babel/preset-typescript",
-							{
-								modules: true
-							}
-					]
+          ],
+          plugins: []
 				}
       },
       {
         test: /\.css$/,
-        loaders: ['style','css']
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
       }
 		]
 	},
