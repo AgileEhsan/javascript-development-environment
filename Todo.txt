@@ -1,0 +1,6 @@
+REM DEPRECATED eslint-plugin-import@2.17.3 requires a peer of eslint@2.x - 5.x but none is installed. You must install peer dependencies yourself.
+REM start "" npm install --save-dev eslint-plugin-import
+REM DEPRECATED eslint-watch@5.1.2 requires a peer of eslint@>=4 <6.0.0 but none is installed. You must install peer dependencies yourself.
+REM start "" npm install --save-dev eslint-watch
+REM WARN deprecated nsp@3.2.1: The Node Security Platform service is shutting down 9/30 - https://blog.npmjs.org/post/175511531085/the-node-security-platform-service-is-shutting
+REM start "" npm install --save-dev nsp

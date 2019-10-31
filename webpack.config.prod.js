@@ -2,7 +2,8 @@ import webpack from 'webpack';
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackMd5Hash from 'webpack-md5-hash';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
 
 export default {
   //debug: true,
@@ -65,10 +66,32 @@ export default {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
+				options: {
+					presets: [
+              "@babel/preset-env",
+              "@babel/preset-flow",
+              "@babel/preset-react",
+              "@babel/preset-typescript",
+          ],
+          plugins: []
+				}
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('css?sourceMap')
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: (resourcePath, context) => {
+                // publicPath is the relative path of the resource to the context
+                // e.g. for ./css/admin/main.css the publicPath will be ../../
+                // while for ./css/main.css the publicPath will be ../
+                return path.relative(path.dirname(resourcePath), context) + '/';
+              },
+            },
+          },
+          'css-loader',
+        ],
       }
     ]
   }
